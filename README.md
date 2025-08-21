@@ -1,16 +1,16 @@
-US Birth Outcomes Analysis (2016–2018)
+**US Birth Outcomes Analysis (2016–2018)**
 
-Dataset
+**Dataset**
 - Source: `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality`
 - Rows: 1,878 (county-year aggregated)
 - Coverage: 626 counties across 3 years (2016–2018)
 
-Data Understanding (EDA)
+**Data Understanding (EDA)**
 - No missing values in key columns (birth weight, mother’s age, gestation weeks).
 - Stable time coverage: 2016–2018.
 - 626 distinct counties.
 
-KPIs
+**KPIs**
 - **Births per year**: Declined year by year.
 - **Average mother’s age**: Stable at ~28 years.
 - **Average birth weight**: Stable across years, minor fluctuation in 2018.
@@ -19,7 +19,7 @@ KPIs
 - **Gestational weeks**: Stable, but **pre-pregnancy BMI increased**.
 - **Lowest prenatal weeks**: Nueces County, TX.
 
-Key Insights from Natality Data (2016–2018)
+**Key Insights from Natality Data (2016–2018)**
 
 Top Counties by Births
 Los Angeles County, CA recorded the highest number of newborns (≈350,313 over 3 years).
@@ -29,7 +29,7 @@ Prenatal Care
 Nueces County, TX had the lowest average prenatal weeks (8.93), indicating potential gaps in prenatal care access.
 
 
-Year-over-Year (YoY) Trends
+**Year-over-Year (YoY) Trends**
 
 Births declined consistently:
 2017 vs 2016: –2.29%
@@ -43,4 +43,4 @@ Counties Below National Average (Consistently)
 257 counties had lower-than-average birth weights across all three years.
 
 Mother’s Age & Birth Weight Correlation
-Positive trend: older mothers were more likely to give birth to healthier (heavier) babies in 2018.
+**Positive trend:** older mothers were more likely to give birth to healthier (heavier) babies in 2018.
