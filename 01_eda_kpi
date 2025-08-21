@@ -1,0 +1,106 @@
+SELECT
+  COUNT(Ave_Age_of_Mother), COUNT(Ave_OE_Gestational_Age_Wks), COUNT(Ave_Birth_Weight_gms)
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+WHERE
+  Ave_Age_of_Mother IS NULL 
+  OR
+  Ave_OE_Gestational_Age_Wks IS NULL 
+  OR
+  Ave_Birth_Weight_gms IS NULL;
+
+##No missing values were found in key columns (mother’s age, gestational weeks, birth weight). This dataset is highly complete and ready for analysis without imputation##
+
+SELECT
+  SUM(Births) as Births_Per_Year,
+  Year
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  Year
+ORDER BY
+  Births_Per_Year DESC;
+
+## It has been observed that the birth rate is declining year by year.##
+
+SELECT
+  AVG(Ave_Age_of_Mother) as Average_Age_Mother,
+  Year
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  Year
+ORDER BY
+  Average_Age_Mother DESC;
+
+## The average age of mother remains almost same which is 28 Years.##
+
+SELECT
+  AVG(Ave_Birth_Weight_gms) as Birth_Weight_In_Grams,
+  AVG(Ave_Birth_Weight_gms)/1000 as Birth_Weight_In_KiloGrams,
+  Year
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  Year
+ORDER BY
+  Birth_Weight_In_Grams ASC;
+
+## The average weight of the child during birth remains the same, for year 2018 the difference is observed in the slightest.##
+
+SELECT
+  ROUND(AVG(Ave_Birth_Weight_gms),2) as Birth_Weight_In_Grams,
+  ROUND(AVG(Ave_Birth_Weight_gms)/1000, 2) as Birth_Weight_In_KiloGrams,
+  County_of_Residence
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  County_of_Residence
+ORDER BY
+  Birth_Weight_In_Grams DESC
+LIMIT 
+  10;
+
+## This shows that Unidentified Counties, AK has the highest Average weight among the newborns.##
+
+SELECT
+  ROUND(AVG(Ave_Birth_Weight_gms),2) as Birth_Weight_In_Grams,
+  ROUND(AVG(Ave_Birth_Weight_gms)/1000, 2) as Birth_Weight_In_KiloGrams,
+  County_of_Residence
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  County_of_Residence
+ORDER BY
+  Birth_Weight_In_Grams ASC
+LIMIT 
+  10;
+
+## This shows that Hinds County, MS has the lowest Average weight among the newborns.##
+
+SELECT
+  ROUND(AVG(Ave_OE_Gestational_Age_Wks),2) as AVG_Gestationa_Age,
+  ROUND(AVG(Ave_Pre_pregnancy_BMI),2) as AVG_PrePregnancy_BMI,
+  Year
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  Year;
+
+## The average gestational weeks remains quite the same overall through the course of 3 years.##
+## However, the average pre pregnancy BMI has increased over years.##
+
+SELECT
+  County_of_Residence,
+  ROUND(AVG(Ave_Number_of_Prenatal_Wks),2) as AVG_PrenatalWeeks
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  County_of_Residence
+ORDER BY
+  AVG_PrenatalWeeks ASC
+LIMIT
+  10;
+
+## Nueces County, TX has been reported with the least Average number of prenatal weeks.##
+
