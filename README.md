@@ -13,11 +13,17 @@ Coverage: 626 counties, 3 years.
 **KPIs & EDA**
 
 Births: Declined YoY (2017: –2.29%, 2018: –1.65%).
+
 Mother’s Age: Stable (~28 years).
+
 Birth Weight: Stable; minor dip in 2018.
+
 BMI: Pre-pregnancy BMI increased over time.
+
 Prenatal Care: Lowest in Nueces County, TX (8.93 weeks).
+
 Highest Birth Weight: Unidentified Counties, AK.
+
 Lowest Birth Weight: Hinds County, MS.
 
 **Insights**
