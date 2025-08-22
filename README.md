@@ -1,46 +1,47 @@
 **US Birth Outcomes Analysis (2016–2018)**
 
-**Dataset**
-- Source: `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality`
-- Rows: 1,878 (county-year aggregated)
-- Coverage: 626 counties across 3 years (2016–2018)
+Dataset
+Source: bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
 
-**Data Understanding (EDA)**
-- No missing values in key columns (birth weight, mother’s age, gestation weeks).
-- Stable time coverage: 2016–2018.
-- 626 distinct counties.
+1,878 rows | 626 counties | 3 years (2016–2018)
 
-**KPIs**
-- **Births per year**: Declined year by year.
-- **Average mother’s age**: Stable at ~28 years.
-- **Average birth weight**: Stable across years, minor fluctuation in 2018.
-- **Highest birth weight**: Unidentified Counties, AK.
-- **Lowest birth weight**: Hinds County, MS.
-- **Gestational weeks**: Stable, but **pre-pregnancy BMI increased**.
-- **Lowest prenatal weeks**: Nueces County, TX.
+**Data Overview**
 
-**Key Insights from Natality Data (2016–2018)**
+No missing values in key columns (birth weight, mother’s age, gestation weeks).
+Coverage: 626 counties, 3 years.
 
-Top Counties by Births
-Los Angeles County, CA recorded the highest number of newborns (≈350,313 over 3 years).
-Pre-Pregnancy BMI
-Lowest average BMI observed in New York County, NY (23.9), followed by San Francisco, CA (24.01).
-Prenatal Care
-Nueces County, TX had the lowest average prenatal weeks (8.93), indicating potential gaps in prenatal care access.
+**KPIs & EDA**
 
+Births: Declined YoY (2017: –2.29%, 2018: –1.65%).
+Mother’s Age: Stable (~28 years).
+Birth Weight: Stable; minor dip in 2018.
+BMI: Pre-pregnancy BMI increased over time.
+Prenatal Care: Lowest in Nueces County, TX (8.93 weeks).
+Highest Birth Weight: Unidentified Counties, AK.
+Lowest Birth Weight: Hinds County, MS.
 
-**Year-over-Year (YoY) Trends**
+**Insights**
 
-Births declined consistently:
-2017 vs 2016: –2.29%
-2018 vs 2017: –1.65%
+**Top Counties**
+LA County (CA), Harris (TX), and Cook (IL) led all 3 years.
+Births are concentrated in major metros.
 
-Birthweight change was stable:
-2017 vs 2016: –0.14%
-2018 vs 2017: –0.03%
+**Top States (per Year)**
+CA, TX, and NY consistently lead.
+These three states dominate national births.
 
-Counties Below National Average (Consistently)
-257 counties had lower-than-average birth weights across all three years.
+**Cumulative Births**
+2016: ~3.95M → 2018: ~11.59M.
+Over 11.5M births in 3 years.
 
-Mother’s Age & Birth Weight Correlation
-**Positive trend:** older mothers were more likely to give birth to healthier (heavier) babies in 2018.
+**Total State Births (2016–18)**
+CA: 1.41M, TX: 1.16M, NY: 0.69M.
+California alone = ~12% of US births.
+
+**Birth Weight Distribution**
+p25: ~3235g, p50: ~3278g, p75: ~3320g.
+Stable and consistent across years.
+
+**Summary**
+
+This project explores U.S. natality data (2016–2018) through SQL-based EDA, KPIs, and advanced analytics (ranking, cumulative trends, rolling averages, percentiles). Findings show consistent declines in births, stable maternal age, and highly concentrated birth trends in large states and counties.
