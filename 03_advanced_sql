@@ -1,0 +1,160 @@
+SELECT
+  Year,
+  SUM(Births) AS Total_Births,
+  County_of_Residence,
+  RANK() OVER(PARTITION BY Year ORDER BY SUM(Births) DESC) AS County_Rank
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  Year,
+  County_of_Residence
+QUALIFY
+  County_Rank <= 3
+ORDER BY
+  Year,
+  County_Rank;
+
+##OR##
+
+WITH Ranked AS
+(SELECT
+  Year,
+  SUM(Births) AS Total_Births,
+  County_of_Residence,
+  RANK() OVER(PARTITION BY Year ORDER BY SUM(Births) DESC) AS County_Rank
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  Year,
+  County_of_Residence
+ORDER BY
+  Year,
+  County_Rank)
+
+SELECT 
+  *
+FROM
+  Ranked
+WHERE
+  County_Rank <= 3;
+
+WITH State AS
+(SELECT
+  SPLIT(County_of_Residence, ",")[OFFSET(1)] AS State,
+  SUM(Births) as Total_Births,
+  Year,
+  RANK() OVER(PARTITION BY Year ORDER BY SUM(Births) DESC) as State_Rank
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  Year,
+  SPLIT(County_of_Residence, ",")[OFFSET(1)]
+ORDER BY
+  Year,
+  State_Rank)
+SELECT
+  *
+FROM
+  State
+WHERE
+  State_Rank <= 3;
+
+WITH Birth_rate AS
+  (SELECT
+    EXTRACT(YEAR FROM Year) AS Year,
+    SUM(Births) as Total_Births
+   FROM
+    bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+   GROUP BY
+    Year)
+SELECT
+  Year,
+  Total_Births,
+  SUM(Total_Births) OVER (ORDER BY Year ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Commulative_Birth
+FROM
+  Birth_rate
+ORDER BY
+  Year;
+
+
+With Birth_Rate_County AS
+  (
+    SELECT
+      Year,
+      SPLIT(County_of_Residence, ',')[OFFSET(1)] as State,
+      SUM(Births) as Total_Births
+    FROM
+      bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+    GROUP BY
+      Year,
+      State
+  )
+SELECT
+  Year,
+  State,
+  Total_Births,
+  SUM(Total_Births) OVER (PARTITION BY State ORDER BY Year ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Com_County_Birth
+FROM
+  Birth_Rate_County
+ORDER BY
+  State,
+  Year;
+
+WITH Rolling_Avg AS
+  (
+    SELECT
+      Year,
+      County_of_Residence,
+      AVG(Ave_Birth_Weight_gms) AS Avg_BirthWeight
+    FROM
+      bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+    GROUP BY
+      Year,
+      County_of_Residence
+  )
+SELECT
+  Year,
+  County_of_Residence,
+  Avg_BirthWeight,
+  AVG(Avg_BirthWeight) OVER (
+                            PARTITION BY 
+                              County_of_Residence 
+                            ORDER BY 
+                              Year 
+                            ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) AS Com_BirthWeight
+FROM
+  Rolling_Avg
+ORDER BY
+  County_of_Residence,
+  Year;
+
+
+WITH State_Birth AS
+(
+SELECT
+  SPLIT(County_of_Residence, ",")[OFFSET(1)] AS State,
+  SUM(Births) AS Total_Births
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
+GROUP BY
+  State
+ORDER BY
+  Total_Births DESC
+)
+SELECT
+  State,
+  Total_Births,
+  RANK() OVER (ORDER BY Total_Births DESC) as State_Rank
+FROM
+  State_Birth
+ORDER BY
+  State_Rank;
+
+
+SELECT DISTINCT
+  Year,
+  ROUND(PERCENTILE_CONT(Ave_Birth_Weight_gms,0.25) OVER (PARTITION BY Year),2) as p25,
+  ROUND(PERCENTILE_CONT(Ave_Birth_Weight_gms,0.50) OVER (PARTITION BY Year),2) as p50,
+  ROUND(PERCENTILE_CONT(Ave_Birth_Weight_gms,0.75) OVER (PARTITION BY Year),2) as p75
+FROM
+  bigquery-public-data.sdoh_cdc_wonder_natality.county_natality
